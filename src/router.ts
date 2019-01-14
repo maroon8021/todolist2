@@ -12,6 +12,6 @@ export default new Router({
       path: '/',
       name: 'todolist',
       component: TodoListView,
-    }
+    },
   ],
 });

@@ -1,18 +1,52 @@
 <template>
   <div class="todo-list">
-    <TodaysTodoTextarea />
-    <TodoList />
+    <ApmHeader title="Todo List" color="white"/>
+    <div class="columns">
+      <div class="main-area column">
+        <div class="container">
+          <TodaysTodoTextarea />
+          <TodoList />
+          <TimeList />
+          <TodaysLearningTextarea />
+        </div>  
+      </div>
+      <div class="content-area column">
+        <ContentPanel />
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import TodaysTodoTextarea from '@/components/TodaysTodoTextarea.vue';
+import TodoList from '@/components/TodoList.vue';
+import TimeList from '@/components/TimeList.vue';
+import TodaysLearningTextarea from '@/components/TodaysLearningTextarea.vue';
+import ContentPanel from '@/components/ContentPanel.vue';
+import ApmHeader from 'appearamce';
 
 @Component({
   components: {
-    HelloWorld,
+    TodaysTodoTextarea,
+    TodoList,
+    TimeList,
+    TodaysLearningTextarea,
+    ContentPanel,
+    ApmHeader,
   },
 })
-export default class Home extends Vue {}
+export default class TodoListView extends Vue {}
 </script>
+
+<style scoped lang="scss">
+.todo-list {
+}
+.main-area {
+  margin-top: 16px;
+}
+
+.columns{
+  width: 70%;
+}
+</style>
