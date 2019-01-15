@@ -1,8 +1,8 @@
 <template>
   <div class="todays-learning-textarea">
     <p class="subtitle is-4">Todays Learning</p>
-    <input class="input" type="text" placeholder="Title">
-    <textarea class="textarea" placeholder="Todays learning"></textarea>
+    <input class="input margin-bottom-8" type="text" placeholder="Title">
+    <textarea class="textarea margin-bottom-8" placeholder="Todays learning"></textarea>
     <button class="button is-info">Submit</button>
   </div>
 </template>
@@ -23,5 +23,9 @@ export default class TodaysLearningTextarea extends Vue {
   & .subtitle{
     margin-bottom: 8px;
   }
+}
+
+.margin-bottom-8{
+  margin-bottom: 8px;
 }
 </style>
