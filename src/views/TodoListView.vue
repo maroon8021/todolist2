@@ -47,6 +47,6 @@ export default class TodoListView extends Vue {}
 }
 
 .columns{
-  width: 70%;
+  margin: auto 10%;
 }
 </style>
