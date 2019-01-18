@@ -41,12 +41,23 @@ export default class TodoListView extends Vue {}
 
 <style scoped lang="scss">
 .todo-list {
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 .main-area {
   margin-top: 16px;
+  height: 95%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .columns{
   margin: auto 10%;
+  height: 100%;
+}
+
+.container{
+  max-width: 100%;
 }
 </style>

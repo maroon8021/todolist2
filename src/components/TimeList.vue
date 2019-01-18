@@ -10,7 +10,11 @@
       </thead>
       <tbody>
         <tr v-for="item in timeRange"  :key="item.id">
-          <th width="10%">{{ item.timeRange }}</th>
+          <th class="time-range-text">
+            <span class="tag is-light is-medium time-range-left-item">
+              {{ item.timeRange }}
+            </span>
+          </th>
           <td class="content-input"><ContentInput @focus="onFocusContentInput" /></td>
         </tr>
       </tbody>
@@ -60,6 +64,11 @@ const timeRange = [
   & .subtitle{
     margin-bottom: 0px;
   }
+}
+
+.time-range-text{
+  width: 1px;
+  white-space: nowrap;
 }
 
 .list{
