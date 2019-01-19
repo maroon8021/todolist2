@@ -10,7 +10,7 @@
           <TodaysLearningTextarea />
         </div>  
       </div>
-      <div class="content-area column">
+      <div class="content-area column" v-show="isDisplayed">
         <ContentPanel />
       </div>
     </div>
@@ -36,7 +36,13 @@ import ApmHeader from 'appearamce';
     ApmHeader,
   },
 })
-export default class TodoListView extends Vue {}
+export default class TodoListView extends Vue {
+
+  get isDisplayed(): boolean {
+    return this.$store.getters.getIsContentPanelShown;
+  }
+
+}
 </script>
 
 <style scoped lang="scss">

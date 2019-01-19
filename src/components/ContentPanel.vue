@@ -1,5 +1,5 @@
 <template>
-  <div class="content-panel" v-show="isDisplayed">
+  <div class="content-panel">
     <p class="subtitle is-4">{{ title }}</p>
     <textarea class="textarea" placeholder="Todays learning"></textarea>
   </div>
@@ -11,10 +11,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class ContentPanel extends Vue {
   @Prop() private title!: string;
-
-  get isDisplayed(): boolean {
-    return this.$store.getters.getIsContentPanelShown;
-  }
 
 }
 </script>

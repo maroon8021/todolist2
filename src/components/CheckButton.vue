@@ -28,7 +28,7 @@ export default class CheckButton extends Vue {
 
 <style scoped lang="scss">
 .check-button{
-  padding: 0 2%;
+  padding: 0 12px;
   margin-top: 2px;
   margin-left: 4px;
 }

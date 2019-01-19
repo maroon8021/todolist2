@@ -69,6 +69,7 @@ const timeRange = [
 .time-range-text{
   width: 1px;
   white-space: nowrap;
+  padding: 4px 12px;
 }
 
 .list{
@@ -84,6 +85,6 @@ const timeRange = [
 }
 
 .content-input{
-  padding: 0;
+  padding: 1px 0;
 }
 </style>
