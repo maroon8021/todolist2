@@ -1,5 +1,5 @@
 <template>
-  <div class="todo-list">
+  <div class="todo-list" @keyup.esc="hideContentArea">
     <ApmHeader title="Todo List" color="white"/>
     <div class="columns">
       <div class="main-area column">
@@ -37,6 +37,10 @@ import ApmHeader from 'appearamce';
   },
 })
 export default class TodoListView extends Vue {
+
+  private hideContentArea(): void {
+    this.$store.commit('changeContentAreaStatus', false);
+  }
 
   get isDisplayed(): boolean {
     return this.$store.getters.getIsContentPanelShown;

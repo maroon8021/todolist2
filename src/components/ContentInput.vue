@@ -24,7 +24,7 @@ export default class ContentInput extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .content-input input{
-  width: 99%;
+  width: 98%;
   height: 40px;
   border: 1px solid transparent;
   margin-left: 8px;
