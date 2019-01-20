@@ -17,4 +17,12 @@ export default class ContentPanel extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.subtitle{
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.textarea{
+  height: 300px;
+}
 </style>
