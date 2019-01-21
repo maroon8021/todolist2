@@ -12,8 +12,13 @@ exports.handler = (event, context, callback) => {
   switch (operation) {
     case method.GET : 
       handleGetMethod();
+      break;
     case method.POST : 
       handlePostMethod();
+      break;
+
+    default:
+      break;
   }
 }
 
@@ -53,10 +58,39 @@ function getTodaysTodo(){
 function updateTodaysTodo(){
   let params = {
     TableName : tableName.TODAYS_TODO,
-    id : 1,
-    content : event_.content
+    Key : {
+      id : 1 
+    },
+    UpdateExpression: 'SET #content = :newContent, #date = :newDate',
+    ExpressionAttributeNames: {
+      '#content': 'content',
+      '#date': 'date',
+    },
+    ExpressionAttributeValues: {
+      ':newContent': event_.content,
+      ':newDate': getToday()
+    }
   }
+  dynamo.update(params,(err, data) => {
+    if(err) {
+      context.fail(err);
+    }else{
+      console.log('data is update by "updateTodaysTodo"');
+      console.log(data);
+      context.succeed(data);
+    }
+  })
+
 }
+
+function getToday(){
+  let date = new Date();
+  let year = date.getFullYear();
+  let month = ("00" + (date.getMonth()+1)).slice(-2);
+  let day = ("00" + date.getDate()).slice(-2);
+  return year + '-' + month + '-' + day;
+}
+
 
 const method = {
   GET : 'GET',
