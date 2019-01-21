@@ -4,6 +4,7 @@ node_modules
 
 /service
 /lambda/config/
+/lambda/**/config/
 
 /tests/e2e/reports/
 selenium-debug.log
