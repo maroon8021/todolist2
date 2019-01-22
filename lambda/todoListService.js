@@ -34,7 +34,14 @@ function handleGetMethod(){
 }
 
 function handlePostMethod(){
+  switch (event_.type){
+    case type.UPDATE_TODAYS_TODO :
+      updateTodaysTodo();
+      break;
 
+    default:
+      break;
+  }
 }
 
 
