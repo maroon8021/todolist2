@@ -28,6 +28,10 @@ function handleGetMethod(){
       getTodaysTodo();
       break;
 
+    case type.GET_TIME_RANGE_LIST :
+      getTimeRangeList();
+      break;
+
     default:
       break;
   }
@@ -55,6 +59,22 @@ function getTodaysTodo(){
       context_.fail(err);
     }else{
       console.log('Got data by "getTodaysTodo"');
+      console.log(data);
+      context.succeed(data);
+    }
+  });
+}
+
+function getTimeRangeList(){
+  let params = {
+    TableName : tableName.TIME_LIST,
+    key : 'id'
+  }
+  dynamo.scan(params, function(err, data){
+    if(err){
+      context_.fail(err);
+    }else{
+      console.log('Got data by "getTimeRangeList"');
       console.log(data);
       context.succeed(data);
     }
@@ -106,5 +126,6 @@ const method = {
 
 const type = {
   GET_TODAYS_TODO : 'getTodaysTodo',
+  GET_TIME_RANGE_LIST : 'getTimeRangeList',
   UPDATE_TODAYS_TODO : 'updateTodaysTodo',
 }
