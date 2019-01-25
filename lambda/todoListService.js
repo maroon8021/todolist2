@@ -39,6 +39,10 @@ function handleGetMethod(){
 
 function handlePostMethod(){
   switch (event_.type){
+    case type.ADD_TODAYS_LEARNING :
+      addTodaysLearning();
+      break;
+
     case type.UPDATE_TODAYS_TODO :
       updateTodaysTodo();
       break;
@@ -81,6 +85,9 @@ function getTimeRangeList(){
   });
 }
 
+function addTodaysLearning(){
+  
+}
 
 function updateTodaysTodo(){
   let params = {
@@ -125,6 +132,7 @@ const method = {
 }
 
 const type = {
+  ADD_TODAYS_LEARNING : 'addTodaysLearning',
   GET_TODAYS_TODO : 'getTodaysTodo',
   GET_TIME_RANGE_LIST : 'getTimeRangeList',
   UPDATE_TODAYS_TODO : 'updateTodaysTodo',
