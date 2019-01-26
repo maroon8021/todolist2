@@ -86,7 +86,21 @@ function getTimeRangeList(){
 }
 
 function addTodaysLearning(){
-  
+  let params = {
+    TableName : tableName.TODAYS_LEARNING,
+    id : '', // Need to fix
+    title : event_.title, //?
+    content : event_.content, //?
+  }
+  dynamo.put(params, function(err, data){ // can be templated?
+    if(err){
+      context_.fail(err);
+    }else{
+      console.log('Got data by "getTimeRangeList"');
+      console.log(data);
+      context.succeed(data);
+    }
+  });
 }
 
 function updateTodaysTodo(){
