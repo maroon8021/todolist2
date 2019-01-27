@@ -30,3 +30,10 @@
 # 普通にlambdaとAPI Gatewayの作り方忘れた
  - とりあえずDynamoDBのテーブルつくった
  - IAMでlambdaに付与するロール作った
+
+
+## lambda用コードをzip化
+lambdaのディレクトリいって  
+`zip -r lambda-180000 ./`  
+あたりでイケる  
+本来的にはcliでupできるようにすべき

@@ -1,7 +1,7 @@
 <template>
   <div class="todays-todo-textarea">
     <p class="subtitle is-4">Todays Todo</p>
-    <textarea class="textarea" placeholder="Todays todo"></textarea>
+    <textarea v-model="todaysTodo" class="textarea" placeholder="Todays todo"></textarea>
   </div>
 </template>
 
@@ -11,6 +11,18 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class TodaysTodoTextarea extends Vue {
   @Prop() private msg!: string;
+
+  get todaysTodo(): any {
+    return this.$store.getters.getTodaysTodo;
+  }
+
+  set todaysTodo(value) {
+    this.$store.dispatch('updateTodaysTodo', value);
+  }
+
+  mounted(): void {
+    this.$store.dispatch('getTodaysTodo');
+  }
 }
 </script>
 

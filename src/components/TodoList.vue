@@ -4,7 +4,7 @@
     <draggable v-model="lists" :options="{group:'people'}" @start="drag=true" @end="drag=false">
       <div class="list" v-for="element in lists" :key="element.id">
         <CheckButton :item-id="element.id" :status="element.isChecked"/>
-        <span class="text"><ContentInput :value="element.text"/></span> 
+        <span class="text"><ContentInput :id="element.id" :value="element.text" @enter="onEnter"/></span> 
       </div>
     </draggable>
   </div>
@@ -25,7 +25,30 @@ import ContentInput from '@/components/ContentInput.vue';
 })
 export default class TodoList extends Vue {
   get lists(): any {
-    return this.$store.getters.getLists;
+    if(this.$store.getters.getTodoLists.length === 0){
+      this.$store.commit('addNewRow');
+    }
+    return this.$store.getters.getTodoLists;
+  }
+
+  onEnter(event: any): void{
+    console.log(event)
+    let list = this.$store.getters.getTodoLists;
+    let lastItemId = list[list.length - 1].id;
+
+    if(lastItemId === event.id && event.event.target.value !== ''){
+      this.$store.commit('addNewRow');
+    }
+  }
+
+  mounted(): void {
+    this.$store.dispatch('getTodoList');
+  }
+}
+
+function emptyRow() {
+  return {
+
   }
 }
 </script>

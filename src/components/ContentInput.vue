@@ -1,6 +1,6 @@
 <template>
   <div class="content-input" >
-    <input type="text" @focus="onFocus"/>
+    <input type="text" @focus="onFocus" @keypress.enter="onEnter" v-model="value"/>
   </div>
 </template>
 
@@ -9,14 +9,25 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class ContentInput extends Vue {
-  @Prop() private title!: string;
+  @Prop() private value!: string;
+  @Prop() private id!: string;
 
   public onFocus(event: Event) {
     this.$emit('focus', event);
   }
+
+  onEnter(event: Event): void{
+    this.$emit('enter', {
+      event,
+      id : this.id,
+    });
+  }
+
   get isDisplayed(): boolean {
     return this.$store.getters.getIsContentPanelShown;
   }
+
+  
 
 }
 </script>

@@ -1,8 +1,10 @@
 .DS_Store
 node_modules
 /dist
+*.zip
 
-/service
+
+service
 /lambda/config/
 /lambda/**/config/
 
