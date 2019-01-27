@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk');
 const dynamo = new AWS.DynamoDB.DocumentClient({region: 'ap-northeast-1'});
-import { tableName } from 'config/config.js'
-let event_ = nulll;
-let context_ = nulll;
+const { tableName } = require('config/config.js');
+let event_ = null;
+let context_ = null;
 
 exports.handler = (event, context, callback) => {
   const operation = event.method;
@@ -23,12 +23,17 @@ exports.handler = (event, context, callback) => {
 }
 
 function handleGetMethod(){
-  switch (event_.type){
-    case type.GET_TODAYS_TODO :
+  console.log('Start to operate GET method');
+  switch (event_.action){
+    case action.GET_TODAYS_TODO :
       getTodaysTodo();
       break;
+    
+    case action.GET_TODO_LIST :
+      getTodoList();
+      break;
 
-    case type.GET_TIME_RANGE_LIST :
+    case action.GET_TIME_RANGE_LIST :
       getTimeRangeList();
       break;
 
@@ -38,12 +43,12 @@ function handleGetMethod(){
 }
 
 function handlePostMethod(){
-  switch (event_.type){
-    case type.ADD_TODAYS_LEARNING :
+  switch (event_.action){
+    case action.ADD_TODAYS_LEARNING :
       addTodaysLearning();
       break;
 
-    case type.UPDATE_TODAYS_TODO :
+    case action.UPDATE_TODAYS_TODO :
       updateTodaysTodo();
       break;
 
@@ -56,15 +61,42 @@ function handlePostMethod(){
 function getTodaysTodo(){
   let params = {
     TableName : tableName.TODAYS_TODO,
+    Key : {
+      id : 1
+    }
+  }
+  dynamo.get(params, function(err, data){
+    if(err){
+      context_.fail(err);
+    }else{
+      console.log('Got data by "getTodaysTodo"');
+      console.log(data);
+      delete data.Item.id;
+      context_.succeed(data.Item);
+    }
+  });
+}
+
+function getTodoList(){
+  let params = {
+    TableName : tableName.TODO_LIST,
     key : 'id'
   }
   dynamo.scan(params, function(err, data){
     if(err){
       context_.fail(err);
     }else{
-      console.log('Got data by "getTodaysTodo"');
+      console.log('Got data by "getTodoList"');
       console.log(data);
-      context.succeed(data);
+      data.Items.sort((a, b) => {
+        if(a.order === b.order){
+          return 0;
+        }
+        return a.order < b.order ? -1 : 1;
+        // 1 means a will be lower index
+        // -1 means a will be lower index
+      })
+      context_.succeed(data.Items);
     }
   });
 }
@@ -80,13 +112,27 @@ function getTimeRangeList(){
     }else{
       console.log('Got data by "getTimeRangeList"');
       console.log(data);
-      context.succeed(data);
+      context_.succeed(data);
     }
   });
 }
 
 function addTodaysLearning(){
-  
+  let params = {
+    TableName : tableName.TODAYS_LEARNING,
+    id : '', // Need to fix
+    title : event_.title, //?
+    content : event_.content, //?
+  }
+  dynamo.put(params, function(err, data){ // can be templated?
+    if(err){
+      context_.fail(err);
+    }else{
+      console.log('Got data by "getTimeRangeList"');
+      console.log(data);
+      context_.succeed(data);
+    }
+  });
 }
 
 function updateTodaysTodo(){
@@ -111,7 +157,7 @@ function updateTodaysTodo(){
     }else{
       console.log('data is update by "updateTodaysTodo"');
       console.log(data);
-      context.succeed(data);
+      context_.succeed(data);
     }
   })
 
@@ -131,9 +177,10 @@ const method = {
   POST : 'POST'
 }
 
-const type = {
+const action = {
   ADD_TODAYS_LEARNING : 'addTodaysLearning',
   GET_TODAYS_TODO : 'getTodaysTodo',
+  GET_TODO_LIST : 'getTodoList',
   GET_TIME_RANGE_LIST : 'getTimeRangeList',
   UPDATE_TODAYS_TODO : 'updateTodaysTodo',
 }
