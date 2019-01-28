@@ -1,6 +1,6 @@
 <template>
   <div class="content-input" >
-    <input type="text" @focus="onFocus" @keypress.enter="onEnter" v-model="value"/>
+    <input type="text" @focus="onFocus" @blur="onBlur" @keypress.enter="onEnter" @input="onInput" v-model="getValue"/>
   </div>
 </template>
 
@@ -13,7 +13,10 @@ export default class ContentInput extends Vue {
   @Prop() private id!: string;
 
   public onFocus(event: Event) {
-    this.$emit('focus', event);
+    this.$emit('focus', {
+      event,
+      id : this.id,
+    });
   }
 
   onEnter(event: Event): void{
@@ -23,8 +26,26 @@ export default class ContentInput extends Vue {
     });
   }
 
-  get isDisplayed(): boolean {
-    return this.$store.getters.getIsContentPanelShown;
+  onBlur(event: Event): void{
+    this.$emit('blur', {
+      event,
+      id : this.id,
+    });
+  }
+
+  onInput(event: Event): void{
+    this.$emit('input', {
+      event,
+      id : this.id,
+    });
+  }
+
+  get getValue(): string {
+    return this.value;
+  }
+
+  set getValue(value) {
+    //this.$store.commit('updateContentPanelTitle', value);
   }
 
   

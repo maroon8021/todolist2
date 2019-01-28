@@ -1,7 +1,7 @@
 <template>
   <div class="content-panel">
     <p class="subtitle is-4">{{ title }}</p>
-    <textarea class="textarea" placeholder="Todays learning"></textarea>
+    <textarea class="textarea" placeholder="Todays learning" v-model="content" @keyup.left="onKeyup" @keyup.esc="onBlur" @blur="onBlur"></textarea>
   </div>
 </template>
 
@@ -10,7 +10,28 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class ContentPanel extends Vue {
-  @Prop() private title!: string;
+
+  onKeyup(event: KeyboardEvent){
+    if(event.altKey){
+      // Will be implemented
+    }
+  }
+
+  onBlur(event: any){
+    this.$store.dispatch('updateTimeListContent');
+  }
+
+  get title(): any {
+    return this.$store.getters.getContentPanelTitle;
+  }
+
+  get content():any {
+    return this.$store.getters.getContentPanelContent;
+  }
+
+  set content(value) {
+    this.$store.commit('updateTimeListContent', value);
+  }
 
 }
 </script>
