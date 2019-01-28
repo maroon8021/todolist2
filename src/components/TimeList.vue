@@ -15,7 +15,7 @@
               {{ item.timeRange }}
             </span>
           </th>
-          <td class="content-input"><ContentInput @focus="onFocusContentInput" /></td>
+          <td class="content-input"><ContentInput :id="item.id" @focus="onFocusContentInput" @blur="onBlur" @input="onInput" :value="item.title"/></td>
         </tr>
       </tbody>
     </table>
@@ -32,14 +32,37 @@ import ContentInput from '@/components/ContentInput.vue';
   },
 })
 export default class TimeList extends Vue {
-  public onFocusContentInput(event: Event) {
+  public onFocusContentInput(event: any) {
+    let input:any = event.event.target;
+    this.$store.commit('updateTargetTimeList', event.id);
     this.$store.commit('changeContentAreaStatus', true);
   }
-  get timeRange(): any {
-    return this.$store.getters.getTimeRange;
+
+  public onBlur(event: any) {
+    let input:any = event.event.target;
+    this.$store.dispatch('updateTimeListTitle');
+    
   }
+
+  public onInput(event: any) {
+    let input:any = event.event.target;
+    this.$store.commit('updateTimeListTitle', {
+      id : event.id,
+      title : input.value
+    });
+    
+  }
+
   public beforeCreate(): void {
     this.$store.commit('initTimeRangeList', timeRange);
+  }
+
+  mounted(): void {
+    this.$store.dispatch('getTimeRangeList');
+  }
+
+  get timeRange(): any {
+    return this.$store.getters.getTimeRange;
   }
 }
 

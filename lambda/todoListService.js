@@ -52,6 +52,14 @@ function handlePostMethod(){
       updateTodaysTodo();
       break;
 
+    case action.UPDATE_TIME_LIST_TITLE :
+      updateTimeListTitle();
+      break;
+
+    case action.UPDATE_TIME_LIST_CONTENT :
+      updateTimeListContent();
+      break;
+
     default:
       break;
   }
@@ -112,7 +120,7 @@ function getTimeRangeList(){
     }else{
       console.log('Got data by "getTimeRangeList"');
       console.log(data);
-      context_.succeed(data);
+      context_.succeed(data.Items);
     }
   });
 }
@@ -163,6 +171,61 @@ function updateTodaysTodo(){
 
 }
 
+function updateTimeListTitle(){
+  let params = {
+    TableName : tableName.TIME_LIST,
+    Key : {
+      id : event_.id
+    },
+    UpdateExpression: 'SET #title = :newTitle, #date = :newDate',
+    ExpressionAttributeNames: {
+      '#title': 'title',
+      '#date': 'date',
+    },
+    ExpressionAttributeValues: {
+      ':newTitle': event_.title,
+      ':newDate': getToday()
+    }
+  }
+  dynamo.update(params,(err, data) => {
+    if(err) {
+      context.fail(err);
+    }else{
+      console.log('data is update by "updateTimeListTitle"');
+      console.log(data);
+      context_.succeed(data);
+    }
+  })
+}
+
+function updateTimeListContent(){
+  let params = {
+    TableName : tableName.TIME_LIST,
+    Key : {
+      id : event_.id
+    },
+    UpdateExpression: 'SET #content = :newContent, #date = :newDate',
+    ExpressionAttributeNames: {
+      '#content': 'content',
+      '#date': 'date',
+    },
+    ExpressionAttributeValues: {
+      ':newContent': event_.content,
+      ':newDate': getToday()
+    }
+  }
+  dynamo.update(params,(err, data) => {
+    if(err) {
+      context.fail(err);
+    }else{
+      console.log('data is update by "updateTimeListContent"');
+      console.log(data);
+      context_.succeed(data);
+    }
+  })
+
+}
+
 function getToday(){
   let date = new Date();
   let year = date.getFullYear();
@@ -183,4 +246,6 @@ const action = {
   GET_TODO_LIST : 'getTodoList',
   GET_TIME_RANGE_LIST : 'getTimeRangeList',
   UPDATE_TODAYS_TODO : 'updateTodaysTodo',
+  UPDATE_TIME_LIST_TITLE : 'updateTimeListTitle',
+  UPDATE_TIME_LIST_CONTENT : 'updateTimeListContent',
 }
