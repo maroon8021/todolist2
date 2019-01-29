@@ -60,5 +60,6 @@ export default class ContentInput extends Vue {
   height: 40px;
   border: 1px solid transparent;
   margin-left: 8px;
+  font-size: 17px;
 }
 </style>

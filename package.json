@@ -10,6 +10,8 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^11.2.0",
+    "@ckeditor/ckeditor5-vue": "^1.0.0-beta.1",
     "appearamce": "git+ssh://git@github.com/maroon8021/appearamce.git",
     "axios": "^0.18.0",
     "register-service-worker": "^1.5.2",
@@ -35,6 +37,7 @@
     "sass-loader": "^7.0.1",
     "ts-jest": "^23.0.0",
     "typescript": "^3.0.0",
+    "uglifyjs-webpack-plugin": "^2.1.1",
     "vue-template-compiler": "^2.5.21"
   }
 }
