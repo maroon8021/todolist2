@@ -4,7 +4,6 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 
-import CKEditor from '@ckeditor/ckeditor5-vue';
 
 Vue.config.productionTip = false;
 
@@ -13,5 +12,3 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount('#app');
-
-Vue.use( CKEditor );

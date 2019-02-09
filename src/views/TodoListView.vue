@@ -14,6 +14,9 @@
         <ContentPanel />
       </div>
     </div>
+    <div v-show="isShowModal">
+      <NotificationModal />
+    </div>
   </div>
 </template>
 
@@ -24,6 +27,7 @@ import TodoList from '@/components/TodoList.vue';
 import TimeList from '@/components/TimeList.vue';
 import TodaysLearningTextarea from '@/components/TodaysLearningTextarea.vue';
 import ContentPanel from '@/components/ContentPanel.vue';
+import NotificationModal from '@/components/NotificationModal.vue';
 import ApmHeader from 'appearamce';
 
 @Component({
@@ -33,6 +37,7 @@ import ApmHeader from 'appearamce';
     TimeList,
     TodaysLearningTextarea,
     ContentPanel,
+    NotificationModal,
     ApmHeader,
   },
 })
@@ -44,6 +49,10 @@ export default class TodoListView extends Vue {
 
   get isDisplayed(): boolean {
     return this.$store.getters.getIsContentPanelShown;
+  }
+
+  get isShowModal(): boolean {
+    return this.$store.getters.getIsNotificationModalShown;
   }
 
 }
