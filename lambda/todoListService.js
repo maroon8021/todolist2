@@ -125,22 +125,44 @@ function getTimeRangeList(){
   });
 }
 
-function addTodaysLearning(){
+async function addTodaysLearning(){
+  console.log('Start "addTodaysLearning"');
+  let count = await getCountOfTodaysLearning();
+  console.log('Count is : ' + count);
   let params = {
     TableName : tableName.TODAYS_LEARNING,
-    id : '', // Need to fix
-    title : event_.title, //?
-    content : event_.content, //?
+    Item : {
+      id : count + 1,
+      title : event_.title,
+      content : event_.content,
+    }
   }
-  dynamo.put(params, function(err, data){ // can be templated?
+  console.log('params is');
+  console.log(params);
+  dynamo.put(params, function(err, data){
     if(err){
       context_.fail(err);
     }else{
-      console.log('Got data by "getTimeRangeList"');
+      console.log('Add Todays Learning by "addTodaysLearning"');
       console.log(data);
       context_.succeed(data);
     }
   });
+}
+
+async function getCountOfTodaysLearning(){
+  try {
+    let params = {
+      TableName : tableName.TODAYS_LEARNING,
+      Key : 'id',
+      Select : 'COUNT'
+    }
+    const items = await dynamo.scan(params).promise();
+    return items.Count;
+  } catch (error) {
+    console.error(`[Error]: ${JSON.stringify(error)}`);
+    return error;
+  }
 }
 
 function updateTodaysTodo(){
