@@ -11,13 +11,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class ContentPanel extends Vue {
 
-  onKeyup(event: KeyboardEvent){
-    if(event.altKey){
+  public onKeyup(event: KeyboardEvent) {
+    if (event.altKey) {
       // Will be implemented
     }
   }
 
-  onBlur(event: any){
+  public onBlur(event: any) {
     this.$store.dispatch('updateTimeListContent');
   }
 
@@ -25,7 +25,7 @@ export default class ContentPanel extends Vue {
     return this.$store.getters.getContentPanelTitle;
   }
 
-  get content():any {
+  get content(): any {
     return this.$store.getters.getContentPanelContent;
   }
 

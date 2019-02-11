@@ -20,28 +20,27 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
   },
 })
 export default class TodaysLearningTextarea extends Vue {
-  @Prop() private msg!: string;
 
-  editor:any = ClassicEditor;
-
-  onClick():void {
-    this.$store.dispatch('updateTodaysLearning');
-  }
-
-  get learningTitle(): string{
+  get learningTitle(): string {
     return this.$store.getters.getLearningTitle;
   }
-  get learningContent(): string{
+  get learningContent(): string {
     return this.$store.getters.getLearningContent;
   }
-  get sendStatus(): boolean{
+  get sendStatus(): boolean {
     return this.$store.getters.getLearningSendStatus;
   }
-  set learningTitle(value){
+  set learningTitle(value) {
     this.$store.commit('updateLearningTitle', value);
   }
-  set learningContent(value){
+  set learningContent(value) {
     this.$store.commit('updateLearningContent', value);
+  }
+
+  public editor: any = ClassicEditor;
+
+  public onClick(): void {
+    this.$store.dispatch('updateTodaysLearning');
   }
 }
 </script>

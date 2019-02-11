@@ -33,31 +33,31 @@ import ContentInput from '@/components/ContentInput.vue';
 })
 export default class TimeList extends Vue {
   public onFocusContentInput(event: any) {
-    let input:any = event.event.target;
+    const input: any = event.event.target;
     this.$store.commit('updateTargetTimeList', event.id);
     this.$store.commit('changeContentAreaStatus', true);
   }
 
   public onBlur(event: any) {
-    let input:any = event.event.target;
+    const input: any = event.event.target;
     this.$store.dispatch('updateTimeListTitle');
-    
+
   }
 
   public onInput(event: any) {
-    let input:any = event.event.target;
+    const input: any = event.event.target;
     this.$store.commit('updateTimeListTitle', {
       id : event.id,
-      title : input.value
+      title : input.value,
     });
-    
+
   }
 
   public beforeCreate(): void {
     this.$store.commit('initTimeRangeList', timeRange);
   }
 
-  mounted(): void {
+  public mounted(): void {
     this.$store.dispatch('getTimeRangeList');
   }
 

@@ -10,8 +10,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class TodaysTodoTextarea extends Vue {
-  @Prop() private msg!: string;
-
   get todaysTodo(): any {
     return this.$store.getters.getTodaysTodo;
   }
@@ -20,7 +18,7 @@ export default class TodaysTodoTextarea extends Vue {
     this.$store.dispatch('updateTodaysTodo', value);
   }
 
-  mounted(): void {
+  public mounted(): void {
     this.$store.dispatch('getTodaysTodo');
   }
 }
@@ -33,5 +31,11 @@ export default class TodaysTodoTextarea extends Vue {
   & .subtitle{
     margin-bottom: 8px;
   }
+
+  & .textarea{
+    min-height: 250px;
+  }
 }
+
+
 </style>

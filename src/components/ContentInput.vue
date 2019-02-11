@@ -19,21 +19,21 @@ export default class ContentInput extends Vue {
     });
   }
 
-  onEnter(event: Event): void{
+  public onEnter(event: Event): void {
     this.$emit('enter', {
       event,
       id : this.id,
     });
   }
 
-  onBlur(event: Event): void{
+  public onBlur(event: Event): void {
     this.$emit('blur', {
       event,
       id : this.id,
     });
   }
 
-  onInput(event: Event): void{
+  public onInput(event: Event): void {
     this.$emit('input', {
       event,
       id : this.id,
@@ -45,10 +45,10 @@ export default class ContentInput extends Vue {
   }
 
   set getValue(value) {
-    //this.$store.commit('updateContentPanelTitle', value);
+    // this.$store.commit('updateContentPanelTitle', value);
   }
 
-  
+
 
 }
 </script>

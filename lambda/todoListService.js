@@ -28,6 +28,10 @@ function handleGetMethod(){
     case action.GET_TODAYS_TODO :
       getTodaysTodo();
       break;
+
+    case action.GET_TODAYS_LEARNING :
+      getTodaysLearning();
+      break;
     
     case action.GET_TODO_LIST :
       getTodoList();
@@ -43,9 +47,14 @@ function handleGetMethod(){
 }
 
 function handlePostMethod(){
+  console.log('Start to operate POST method');
   switch (event_.action){
     case action.ADD_TODAYS_LEARNING :
       addTodaysLearning();
+      break;
+
+    case action.DELETE_ALL_TIME_RANGE_LIST :
+      deleteAllTimeRangeList();
       break;
 
     case action.UPDATE_TODAYS_TODO :
@@ -81,6 +90,30 @@ function getTodaysTodo(){
       console.log(data);
       delete data.Item.id;
       context_.succeed(data.Item);
+    }
+  });
+}
+
+function getTodaysLearning(){
+  let params = {
+    TableName : tableName.TODAYS_LEARNING,
+    Key : 'id'
+  }
+  dynamo.scan(params, function(err, data){
+    if(err){
+      context_.fail(err);
+    }else{
+      console.log('Got data by "getTodaysLearning"');
+      console.log(data);
+      for (let i = data.Items.length - 1; i > 0; i--) {
+        let r = Math.floor(Math.random() * (i + 1));
+        let tmp = data.Items[i];
+        data.Items[i] = data.Items[r];
+        data.Items[r] = tmp;
+      }
+      console.log('shuffled');
+      console.log(data.Items);
+      context_.succeed(data.Items);
     }
   });
 }
@@ -165,6 +198,47 @@ async function getCountOfTodaysLearning(){
   }
 }
 
+async function deleteAllTimeRangeList(){
+  let result = await updateAllTimeRangeList();
+  context_.succeed(result);
+}
+
+async function updateAllTimeRangeList(){
+  try {
+    for (let index = 0; index < 10; index++) { //10 will be changed
+      let params = {
+        TableName : tableName.TIME_LIST,
+        Key : {
+          id : index + 1
+        },
+        UpdateExpression: 'SET #title = :newTitle, #content = :newContent, #date = :newDate',
+        ExpressionAttributeNames: {
+          '#title': 'title',
+          '#content': 'content',
+          '#date': 'date',
+        },
+        ExpressionAttributeValues: {
+          ':newTitle': '',
+          ':newContent': '',
+          ':newDate': getToday()
+        }
+      }
+      dynamo.update(params,(err, data) => {
+        if(err) {
+          context.fail(err);
+        }else if(index + 1 === 10){
+          console.log('data is update by "deleteAllTimeRangeList"');
+          return data;
+        }
+      });
+    }
+  } catch (error) {
+    console.error(`[Error]: ${JSON.stringify(error)}`);
+    return error;
+  }
+  
+}
+
 function updateTodaysTodo(){
   let params = {
     TableName : tableName.TODAYS_TODO,
@@ -193,19 +267,55 @@ function updateTodaysTodo(){
 
 }
 
+async function updateAllTimeRangeList(){
+  console.log('updateAllTimeRangeList');
+  try {
+    for (let index = 0; index < 10; index++) { //10 will be changed
+    console.log('current index');
+    console.log(index);
+      let params = {
+        TableName : tableName.TIME_LIST,
+        Key : {
+          id : index + 1
+        },
+        UpdateExpression: 'SET #title = :newTitle, #content = :newContent, #date = :newDate',
+        ExpressionAttributeNames: {
+          '#title': 'title',
+          '#content': 'content',
+          '#date': 'date',
+        },
+        ExpressionAttributeValues: {
+          ':newTitle': ' ', // empty string can not be inserted
+          ':newContent': ' ',
+          ':newDate': getToday()
+        }
+      }
+      const item = await dynamo.update(params).promise();
+      if(index + 1 === 10){
+        console.log('data is update by "deleteAllTimeRangeList"');
+        return item;
+      }
+    }
+  } catch (error) {
+    console.error(`[Error]: ${JSON.stringify(error)}`);
+    return context_.fail(error);
+  }
+  
+}
+
 function updateTimeListTitle(){
   let params = {
     TableName : tableName.TIME_LIST,
     Key : {
       id : event_.id
     },
-    UpdateExpression: 'SET #title = :newTitle, #date = :newDate',
+    UpdateExpression: 'SET #title = :newtitle, #date = :newDate',
     ExpressionAttributeNames: {
       '#title': 'title',
       '#date': 'date',
     },
     ExpressionAttributeValues: {
-      ':newTitle': event_.title,
+      ':newtitle': event_.title,
       ':newDate': getToday()
     }
   }
@@ -218,6 +328,7 @@ function updateTimeListTitle(){
       context_.succeed(data);
     }
   })
+
 }
 
 function updateTimeListContent(){
@@ -264,7 +375,9 @@ const method = {
 
 const action = {
   ADD_TODAYS_LEARNING : 'addTodaysLearning',
+  DELETE_ALL_TIME_RANGE_LIST : 'deleteAllTimeRangeList',
   GET_TODAYS_TODO : 'getTodaysTodo',
+  GET_TODAYS_LEARNING : 'getTodaysLearning',
   GET_TODO_LIST : 'getTodoList',
   GET_TIME_RANGE_LIST : 'getTimeRangeList',
   UPDATE_TODAYS_TODO : 'updateTodaysTodo',
