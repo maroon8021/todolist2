@@ -1,8 +1,7 @@
-import { register } from 'register-service-worker';
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from "axios";
-import {todoListUrl, resorce} from './service/index'
+import axios from 'axios';
+import {todoListUrl, resorce} from './service/index';
 
 Vue.use(Vuex);
 
@@ -19,30 +18,34 @@ export default new Vuex.Store({
     ],
     todaysTodo : {
       content : '',
-      date : ''
+      date : '',
     },
     contentPanel : {
       isShown : false,
-      targetId : 0
+      targetId : 0,
     },
     todaysLearning : {
       title: '',
       content: '',
-      isSending: false
+      isSending: false,
     },
     notificationModal : {
-      isShown : false
-    }
+      isShown : false,
+    },
+    /**
+     * on Learnings Page
+     */
+    learnings : [],
 
   },
   mutations: {
     addNewRow: (state, payload) => {
-      let newTodoList:any = state.todoLists;
+      const newTodoList: any = state.todoLists;
       newTodoList.push({
         id : state.todoLists.length === 0 ? 1 : state.todoLists.length + 1,
         isChecked : false,
-        text : ''
-      })
+        text : '',
+      });
       state.todoLists = newTodoList;
     },
     initTimeRangeList: (state, payload) => {
@@ -65,30 +68,30 @@ export default new Vuex.Store({
       state.todoLists = payload;
     },
     updateTimeList: (state, payload) => {
-      console.log('updateTimeList')
-      let oldList:any = state.timeRangeList;
-      state.timeRangeList = oldList.map((item: any)=>{
-        let target:any = payload.find((list: any) => {
+      console.log('updateTimeList');
+      const oldList: any = state.timeRangeList;
+      state.timeRangeList = oldList.map((item: any) => {
+        const target: any = payload.find((list: any) => {
           // will be fixed
-          return list.id === item.id
+          return list.id === item.id;
         });
         return Object.assign(item, target);
       });
     },
     updateTimeListTitle: (state, payload) => {
       state.contentPanel.targetId = payload.id;
-      let newList:any = state.timeRangeList.map((item:any) => {
-        if(item.id === payload.id){
-          item.title = payload.title
+      const newList: any = state.timeRangeList.map((item: any) => {
+        if (item.id === payload.id) {
+          item.title = payload.title;
         }
         return item;
       });
       state.timeRangeList = newList;
     },
     updateTimeListContent: (state, payload) => {
-      let newList:any = state.timeRangeList.map((item:any) => {
-        if(item.id === state.contentPanel.targetId){
-          item.content = payload
+      const newList: any = state.timeRangeList.map((item: any) => {
+        if (item.id === state.contentPanel.targetId) {
+          item.content = payload;
         }
         return item;
       });
@@ -106,34 +109,63 @@ export default new Vuex.Store({
     updateLearningSendStatus: (state, payload) => {
       state.todaysLearning.isSending = payload;
     },
+    updateLearnings: (state, payload) => {
+      state.learnings = payload;
+    },
     showNotificationModal: (state, payload) => {
       state.notificationModal.isShown = payload;
     },
   },
   actions: {
-    getTodaysTodo(context){
-      axios.get(todoListUrl + resorce.todaysTodo).then(response => {
+    deleteAllTimeList(context) {
+      const params = {
+        action : 'deleteAllTimeRangeList',
+      };
+      axios.post(todoListUrl + resorce.timeList, params).then((response) => {
+        console.log(response);
+        const newList = [];
+        for (let i = 0; i < context.state.timeRangeList.length; i++) {
+          newList.push({
+            id : i + 1,
+            title : '',
+            content : '',
+          });
+        }
+        context.commit('updateTimeList', newList);
+      });
+    },
+    getTodaysTodo(context) {
+      axios.get(todoListUrl + resorce.todaysTodo).then((response) => {
         console.log(response);
         context.commit('updateTodaysTodo', response.data);
       });
     },
-    getTodoList(context){
-      axios.get(todoListUrl + resorce.todoList).then(response => {
+    getTodoList(context) {
+      axios.get(todoListUrl + resorce.todoList).then((response) => {
         console.log(response);
         context.commit('updateTodoList', response.data);
       });
     },
-    getTimeRangeList(context){
-      axios.get(todoListUrl + resorce.timeList).then(response => {
+    getTimeRangeList(context) {
+      axios.get(todoListUrl + resorce.timeList).then((response) => {
         console.log(response);
         context.commit('updateTimeList', response.data);
-        let hasOldData = context.getters.hasOldData;
+        const hasOldData = context.getters.hasOldData;
         context.commit('showNotificationModal', hasOldData);
       });
     },
+    getLearnings(context) {
+      if (context.state.learnings.length > 0) {
+        return;
+      }
+      axios.get(todoListUrl + resorce.todaysLearning).then((response) => {
+        console.log(response);
+        context.commit('updateLearnings', response.data);
+      });
+    },
 
-    updateTodaysTodo(context, value){
-      axios.post(todoListUrl + resorce.todaysTodo, {value}).then(response => {
+    updateTodaysTodo(context, value) {
+      axios.post(todoListUrl + resorce.todaysTodo, {value}).then((response) => {
         console.log(response);
       });
     },
@@ -144,41 +176,41 @@ export default new Vuex.Store({
     //   });
     // },
 
-    updateTimeListTitle(context){
-      let params = {
+    updateTimeListTitle(context) {
+      const params = {
         id : context.state.contentPanel.targetId,
         title : context.getters.getContentPanelTitle,
-        action : 'updateTimeListTitle'
-      }
-      axios.post(todoListUrl + resorce.timeList, params).then(response => {
+        action : 'updateTimeListTitle',
+      };
+      axios.post(todoListUrl + resorce.timeList, params).then((response) => {
         console.log(response);
       });
     },
 
-    updateTimeListContent(context){
-      let params = {
+    updateTimeListContent(context) {
+      const params = {
         id : context.state.contentPanel.targetId,
         content : context.getters.getContentPanelContent,
-        action : 'updateTimeListContent'
-      }
-      axios.post(todoListUrl + resorce.timeList, params).then(response => {
+        action : 'updateTimeListContent',
+      };
+      axios.post(todoListUrl + resorce.timeList, params).then((response) => {
         console.log(response);
       });
     },
 
-    updateTodaysLearning(context){
-      let todaysLearning = context.state.todaysLearning;
-      let isTitleEmpty:boolean = todaysLearning.title == null || todaysLearning.title === '';
-      let isContentEmpty:boolean = todaysLearning.content == null || todaysLearning.content === '';
-      if(isTitleEmpty || isContentEmpty){
+    updateTodaysLearning(context) {
+      const todaysLearning = context.state.todaysLearning;
+      const isTitleEmpty: boolean = todaysLearning.title == null || todaysLearning.title === '';
+      const isContentEmpty: boolean = todaysLearning.content == null || todaysLearning.content === '';
+      if (isTitleEmpty || isContentEmpty) {
         return;
       }
       context.commit('updateLearningSendStatus', true);
-      let params = {
+      const params = {
         title : context.state.todaysLearning.title,
         content : context.state.todaysLearning.content,
-      }
-      axios.post(todoListUrl + resorce.todaysLearning, params).then(response => {
+      };
+      axios.post(todoListUrl + resorce.todaysLearning, params).then((response) => {
         console.log(response);
         context.commit('updateLearningTitle', '');
         context.commit('updateLearningContent', '');
@@ -204,11 +236,11 @@ export default new Vuex.Store({
       return state.notificationModal.isShown;
     },
     getContentPanelTitle: (state, getters): string => {
-      let targetItem:any = state.timeRangeList[state.contentPanel.targetId - 1];
+      const targetItem: any = state.timeRangeList[state.contentPanel.targetId - 1];
       return targetItem ? targetItem.title : '';
     },
     getContentPanelContent: (state, getters): string => {
-      let targetItem:any = state.timeRangeList[state.contentPanel.targetId - 1];
+      const targetItem: any = state.timeRangeList[state.contentPanel.targetId - 1];
       return targetItem ? targetItem.content : '';
     },
     getLearningTitle: (state, getters): any => {
@@ -220,11 +252,21 @@ export default new Vuex.Store({
     getLearningSendStatus: (state, getters): any => {
       return state.todaysLearning.isSending;
     },
+    /**
+     * on Learnings Page
+     */
+    getLearnings: (state, getters): any => {
+      return state.learnings;
+    },
     hasOldData: (state, getters): boolean => {
-      let today = new Date();
-      return state.timeRangeList.some((item: any)=>{
-        let registerDate = new Date(item.date);
-        return today.getTime() != registerDate.getTime();
+      const today = new Date();
+      const y = today.getFullYear();
+      const m = ('00' + (today.getMonth() + 1)).slice(-2);
+      const d = ('00' + today.getDate()).slice(-2);
+      const todayDate = y + '-' + m + '-' + d;
+      return state.timeRangeList.some((item: any) => {
+        const registerDate = new Date(item.date);
+        return item.date !== todayDate;
       });
     },
   },

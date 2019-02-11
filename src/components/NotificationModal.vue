@@ -9,7 +9,7 @@
         </div>
       </section>
     <footer class="modal-card-foot">
-      <button class="button is-success">Delete Content</button>
+      <button class="button is-success" @click="onClickForDelete">Delete Content</button>
       <button class="button" @click="onClickForHide">Cancel</button>
     </footer>
   </div>
@@ -17,25 +17,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class TodaysTodoTextarea extends Vue {
   @Prop() private msg!: string;
 
-  onClickForHide() :void{
+  public onClickForDelete(): void {
+    this.$store.dispatch('deleteAllTimeList');
     this.$store.commit('showNotificationModal', false);
   }
-  // get (): any {
-  //   return this.$store.getters.getTodaysTodo;
-  // }
 
-  // set todaysTodo(value) {
-  //   this.$store.dispatch("updateTodaysTodo", value);
-  // }
-
-  mounted(): void {
-    //this.$store.dispatch("getTodaysTodo");
+  public onClickForHide(): void {
+    this.$store.commit('showNotificationModal', false);
   }
 }
 </script>

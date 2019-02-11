@@ -1,11 +1,19 @@
 <template>
   <div class="todo-list" @keyup.esc="hideContentArea">
     <ApmHeader title="Todo List" color="white"/>
+    <div class="tabs container">
+      <ul>
+        <li class="is-active"><router-link to="/">TodoList</router-link></li>
+        <li><router-link to="/learnings">Learnings</router-link></li>
+      </ul>
+    </div>
     <div class="columns">
       <div class="main-area column">
         <div class="container">
           <TodaysTodoTextarea />
+          <!--
           <TodoList />
+          -->
           <TimeList />
           <TodaysLearningTextarea />
         </div>  
@@ -63,10 +71,14 @@ export default class TodoListView extends Vue {
   position: fixed;
   width: 100%;
   height: 100%;
+  & .tabs {
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
 }
 .main-area {
   margin-top: 16px;
-  height: 95%;
+  height: 90%;
   overflow-y: auto;
   overflow-x: hidden;
 }

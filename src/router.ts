@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import TodoListView from './views/TodoListView.vue';
+import LearningsView from './views/LearningsView.vue';
 
 Vue.use(Router);
 
@@ -12,6 +13,11 @@ export default new Router({
       path: '/',
       name: 'todolist',
       component: TodoListView,
+    },
+    {
+      path: '/learnings',
+      name: 'learnings',
+      component: LearningsView,
     },
   ],
 });

@@ -25,23 +25,23 @@ import ContentInput from '@/components/ContentInput.vue';
 })
 export default class TodoList extends Vue {
   get lists(): any {
-    if(this.$store.getters.getTodoLists.length === 0){
+    if (this.$store.getters.getTodoLists.length === 0) {
       this.$store.commit('addNewRow');
     }
     return this.$store.getters.getTodoLists;
   }
 
-  onEnter(event: any): void{
-    console.log(event)
-    let list = this.$store.getters.getTodoLists;
-    let lastItemId = list[list.length - 1].id;
+  public onEnter(event: any): void {
+    console.log(event);
+    const list = this.$store.getters.getTodoLists;
+    const lastItemId = list[list.length - 1].id;
 
-    if(lastItemId === event.id && event.event.target.value !== ''){
+    if (lastItemId === event.id && event.event.target.value !== '') {
       this.$store.commit('addNewRow');
     }
   }
 
-  mounted(): void {
+  public mounted(): void {
     this.$store.dispatch('getTodoList');
   }
 }
@@ -49,7 +49,7 @@ export default class TodoList extends Vue {
 function emptyRow() {
   return {
 
-  }
+  };
 }
 </script>
 
