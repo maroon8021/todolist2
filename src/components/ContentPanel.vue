@@ -12,8 +12,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class ContentPanel extends Vue {
 
   public onKeyup(event: KeyboardEvent) {
-    if (event.altKey) {
-      // Will be implemented
+    if (event.ctrlKey && event.altKey) {
+      let targetInput = this.$store.getters.getTergetInput;
+      targetInput.focus();
     }
   }
 
@@ -31,6 +32,10 @@ export default class ContentPanel extends Vue {
 
   set content(value) {
     this.$store.commit('updateTimeListContent', value);
+  }
+
+  mounted(){
+    this.$store.commit('setTargetElement', this.$el.getElementsByTagName('textarea')[0]);
   }
 
 }

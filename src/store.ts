@@ -23,6 +23,8 @@ export default new Vuex.Store({
     contentPanel : {
       isShown : false,
       targetId : 0,
+      targetElement : null,
+      panelElement : null,
     },
     todaysLearning : {
       title: '',
@@ -98,7 +100,8 @@ export default new Vuex.Store({
       state.timeRangeList = newList;
     },
     updateTargetTimeList: (state, payload) => {
-      state.contentPanel.targetId = payload;
+      state.contentPanel.targetId = payload.id;
+      state.contentPanel.targetElement = payload.element;
     },
     updateLearningTitle: (state, payload) => {
       state.todaysLearning.title = payload;
@@ -111,6 +114,9 @@ export default new Vuex.Store({
     },
     updateLearnings: (state, payload) => {
       state.learnings = payload;
+    },
+    setTargetElement: (state, payload) => {
+      state.contentPanel.panelElement = payload;
     },
     showNotificationModal: (state, payload) => {
       state.notificationModal.isShown = payload;
@@ -220,6 +226,9 @@ export default new Vuex.Store({
 
   },
   getters: { // This is object
+    getContentPanelTextarea: (state, getters): any => {
+      return state.contentPanel.panelElement;
+    },
     getTodoLists: (state, getters): any => {
       return state.todoLists;
     },
@@ -228,6 +237,9 @@ export default new Vuex.Store({
     },
     getTodaysTodo: (state, getters): any => {
       return state.todaysTodo.content;
+    },
+    getTergetInput: (state, getters): any => {
+      return state.contentPanel.targetElement;
     },
     getIsContentPanelShown: (state, getters): boolean => {
       return state.contentPanel.isShown;
