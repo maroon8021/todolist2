@@ -1,6 +1,6 @@
 <template>
   <div class="content-input" >
-    <input type="text" @focus="onFocus" @blur="onBlur" @keypress.enter="onEnter" @input="onInput" v-model="getValue"/>
+    <input type="text" @focus="onFocus" @blur="onBlur" @keypress.enter="onEnter" @keyup="onKeyUp" @input="onInput" v-model="getValue"/>
   </div>
 </template>
 
@@ -35,6 +35,13 @@ export default class ContentInput extends Vue {
 
   public onInput(event: Event): void {
     this.$emit('input', {
+      event,
+      id : this.id,
+    });
+  }
+
+  public onKeyUp(event: Event): void {
+    this.$emit('keyup', {
       event,
       id : this.id,
     });

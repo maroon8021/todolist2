@@ -15,7 +15,7 @@
               {{ item.timeRange }}
             </span>
           </th>
-          <td class="content-input"><ContentInput :id="item.id" @focus="onFocusContentInput" @blur="onBlur" @input="onInput" :value="item.title"/></td>
+          <td class="content-input"><ContentInput :id="item.id" @focus="onFocusContentInput" @blur="onBlur" @input="onInput" @keyup="onKeyUp" :value="item.title"/></td>
         </tr>
       </tbody>
     </table>
@@ -34,7 +34,10 @@ import ContentInput from '@/components/ContentInput.vue';
 export default class TimeList extends Vue {
   public onFocusContentInput(event: any) {
     const input: any = event.event.target;
-    this.$store.commit('updateTargetTimeList', event.id);
+    this.$store.commit('updateTargetTimeList', {
+      id : event.id,
+      element : input,
+    });
     this.$store.commit('changeContentAreaStatus', true);
   }
 
@@ -50,6 +53,14 @@ export default class TimeList extends Vue {
       id : event.id,
       title : input.value,
     });
+
+  }
+
+  public onKeyUp(event: any) {
+    if (event.event.ctrlKey && event.event.altKey && event.event.key === 'ArrowRight') {
+      let targetPanel = this.$store.getters.getContentPanelTextarea;
+      targetPanel.focus();
+    }
 
   }
 
